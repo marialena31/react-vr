@@ -6,16 +6,36 @@ import {
   View,
 } from 'react-360';
 
+import GazeButton from "react-360-gaze-button";
+
 export default class demo extends React.Component {
+  state = {
+    gazed: false
+  };
+
+  setGazed = () => {
+    this.setState({ gazed: true });
+  };
   render() {
+    const { gazed } = this.state;
     return (
-      <View style={styles.panel}>
-        <View style={styles.greetingBox}>
-          <Text style={styles.greeting}>
-            Panorama de Miami en 360
-          </Text>
+        <View style={styles.panel}>
+          <GazeButton
+              duration={3000}
+              onClick={this.setGazed}
+              render={(remainingTime, isGazed) => (
+                  <View style={styles.greetingBox}>
+                    <Text style={styles.greeting}>
+                      {gazed
+                          ? "Gagné !"
+                          : isGazed
+                              ? `Regarde moi pendant ${remainingTime} ms`
+                              : "Regarde moi"}
+                    </Text>
+                  </View>
+              )}
+          />
         </View>
-      </View>
     );
   }
 };
@@ -30,6 +50,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   greetingBox: {
+    top: 150,
     padding: 20,
     backgroundColor: '#000000',
     borderColor: '#639dda',
